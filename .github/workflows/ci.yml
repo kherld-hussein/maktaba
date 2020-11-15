@@ -1,5 +1,8 @@
-name: CI
+name: Build Maktaba App
 on:
+  push:
+    branches:
+      - release
   pull_request:
     branches:
       - master
@@ -15,7 +18,7 @@ jobs:
           java-version: "12.x"
       - uses: subosito/flutter-action@v1
         with:
-          channel: "stable"
+          channel: "dev"
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
@@ -31,7 +34,7 @@ jobs:
           java-version: "12.x"
       - uses: subosito/flutter-action@v1
         with:
-          channel: "stable"
+          channel: "dev"
       - run: flutter pub get
       - run: flutter clean
       - run: flutter build ios --no-codesign
@@ -47,7 +50,25 @@ jobs:
           java-version: "12.x"
       - uses: subosito/flutter-action@v1
         with:
-          channel: "stable"
+          channel: "dev"
       - run: flutter pub get
       - run: flutter clean
       - run: flutter build apk
+
+  build_desktop:
+    name: Build Flutter (Desktop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter config --enable-linux-desktop
+      - run: flutter build linux
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: linux-build
+          path: build/linux
