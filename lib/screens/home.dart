@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Maktabah'), elevation: 0),
       backgroundColor: Colors.white,
-      body: SafeArea(child: Text('Maktabah')),
+      body: Scaffold(body: SafeArea(child: Text('Maktabah'))),
     );
   }
 }
